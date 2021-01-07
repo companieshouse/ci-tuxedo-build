@@ -26,6 +26,9 @@ RUN mkdir -p /opt/oracle/${oracle_database_version} \
 RUN aws s3 cp s3://${resource_bucket_name}/libraries/c/i686/libstdc++-libc6.2-2.so.3 /usr/lib \
     && chmod 755 /usr/lib/libstdc++-libc6.2-2.so.3
 
+RUN aws s3 cp s3://${resource_bucket_name}/licenses/tuxedo/tuxedo-${tuxedo_version} /opt/tuxedo/${tuxedo_version}/udataobj/lic.txt \
+    && chmod 755 /opt/tuxedo/${tuxedo_version}/udataobj/lic.txt
+
 FROM centos:centos7.9.2009
 
 ARG oracle_database_version
