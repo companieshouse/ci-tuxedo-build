@@ -3,9 +3,9 @@ FROM centos:centos7.9.2009 AS builder
 ARG AWS_ACCESS_KEY_ID
 ARG AWS_SECRET_ACCESS_KEY
 
-ARG oracle_database_version=10.2.0
+ARG oracle_database_version
 ARG resource_bucket_name
-ARG tuxedo_version=8.1
+ARG tuxedo_version
 
 RUN yum install -y unzip
 
@@ -27,6 +27,9 @@ RUN aws s3 cp s3://${resource_bucket_name}/libraries/c/i686/libstdc++-libc6.2-2.
     && chmod 755 /usr/lib/libstdc++-libc6.2-2.so.3
 
 FROM centos:centos7.9.2009
+
+ARG oracle_database_version
+ARG tuxedo_version
 
 COPY --from=builder /opt/tuxedo /opt/tuxedo
 COPY --from=builder /opt/oracle /opt/oracle
