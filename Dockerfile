@@ -32,7 +32,7 @@ RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2
 
 RUN mkdir -p /opt/tuxedo/${tuxedo_version} \
     && tmp_dir=$(mktemp -d /tmp/tuxedo.XXX) \
-    && aws s3 cp s3://${resource_bucket_name}/packages/tuxedo/tuxedo-${tuxedo_version}tar.gz ${tmp_dir} \
+    && aws s3 cp s3://${resource_bucket_name}/packages/tuxedo/tuxedo-${tuxedo_version}.tar.gz ${tmp_dir} \
     && tar -xvzf ${tmp_dir}/tuxedo-${tuxedo_version}.tar.gz -C /opt/tuxedo/${tuxedo_version}/ \
     && rm -rf ${tmp_dir} \
     && -R chown root:root /opt/tuxedo/${tuxedo_version}
