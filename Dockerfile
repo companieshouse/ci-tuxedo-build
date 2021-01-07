@@ -35,14 +35,14 @@ RUN mkdir -p /opt/tuxedo/${tuxedo_version} \
     && aws s3 cp s3://${resource_bucket_name}/packages/tuxedo/tuxedo-${tuxedo_version}.tar.gz ${tmp_dir} \
     && tar -xvzf ${tmp_dir}/tuxedo-${tuxedo_version}.tar.gz -C /opt/tuxedo/${tuxedo_version}/ \
     && rm -rf ${tmp_dir} \
-    && -R chown root:root /opt/tuxedo/${tuxedo_version}
+    && chown -R root:root /opt/tuxedo/${tuxedo_version}
 
 RUN mkdir -p /opt/oracle/${oracle_database_version} \
     && tmp_dir=$(mktemp -d /tmp/oracle.XXX) \
     && aws s3 cp s3://r${resource_bucket_name}/packages/oracle/oracle-database-${oracle_database_version}.tar.gz ${tmp_dir} \
     && tar -xvzf ${tmp_dir}/oracle-database-${oracle_database_version}.tar.gz -C /opt/oracle/${oracle_database_version} \
     && rm -rf ${tmp_dir} \
-    && -R chown root:root /opt/oracle/${oracle_database_version}
+    && chown -R root:root /opt/oracle/${oracle_database_version}
 
 RUN aws s3 cp s3://${resource_bucket_name}/libraries/c/i686/libstdc++-libc6.2-2.so.3 /usr/lib \
     && chmod 755 /usr/lib/libstdc++-libc6.2-2.so.3
