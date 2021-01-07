@@ -39,10 +39,16 @@ RUN mkdir -p /opt/tuxedo/${tuxedo_version} \
 
 RUN mkdir -p /opt/oracle/${oracle_database_version} \
     && tmp_dir=$(mktemp -d /tmp/oracle.XXX) \
-    && aws s3 cp s3://r${resource_bucket_name}/packages/oracle/oracle-database-${oracle_database_version}.tar.gz ${tmp_dir} \
+    && aws s3 cp s3://${resource_bucket_name}/packages/oracle/oracle-database-${oracle_database_version}.tar.gz ${tmp_dir} \
     && tar -xvzf ${tmp_dir}/oracle-database-${oracle_database_version}.tar.gz -C /opt/oracle/${oracle_database_version} \
     && rm -rf ${tmp_dir} \
     && chown -R root:root /opt/oracle/${oracle_database_version}
 
 RUN aws s3 cp s3://${resource_bucket_name}/libraries/c/i686/libstdc++-libc6.2-2.so.3 /usr/lib \
     && chmod 755 /usr/lib/libstdc++-libc6.2-2.so.3
+
+ENV LANG=C
+ENV TUXDIR=/opt/tuxedo/${tuxedo_version}
+ENV PATH=/opt/tuxedo/${tuxedo_version}/bin:${PATH}
+ENV LD_LIBRARY_PATH=/usr/lib/gcc/x86_64-redhat-linux/4.8.5/include:/opt/oracle/${oracle_database_version}/lib:/opt/tuxedo/${tuxedo_version}/lib
+ENV ORACLE_HOME=/opt/oracle/${oracle_database_version}
