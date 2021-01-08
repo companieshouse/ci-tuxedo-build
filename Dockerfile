@@ -54,11 +54,11 @@ RUN yum install -y \
     readline-devel.i686 \
     && yum clean all
 
-RUN rpm --import http://${yum_repository_url}/RPM-GPG-KEY-platform-noarch && \
-    yum install -y yum-utils && \
-    yum-config-manager --add-repo http://${yum_repository_url}/platform-noarch.repo && \
-    yum install -y platform-tools-common-1.0.6 && \
-    yum clean all
+RUN rpm --import http://${yum_repository_url}/RPM-GPG-KEY-platform-noarch \
+    && yum install -y yum-utils \
+    && yum-config-manager --add-repo http://${yum_repository_url}/platform-noarch.repo \
+    && yum install -y platform-tools-common-1.0.6 \
+    && yum clean all
 
 ENV LANG=C
 ENV TUXDIR=/opt/tuxedo/${tuxedo_version}
