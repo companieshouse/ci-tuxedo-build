@@ -33,6 +33,7 @@ FROM centos:centos7.9.2009
 
 ARG oracle_database_version
 ARG tuxedo_version
+ARG yum_repository_url
 
 COPY --from=builder /opt/tuxedo /opt/tuxedo
 COPY --from=builder /opt/oracle /opt/oracle
@@ -52,6 +53,12 @@ RUN yum install -y \
     openssl-devel.i686 \
     readline-devel.i686 \
     && yum clean all
+
+RUN rpm --import http://${yum_repository_url}/RPM-GPG-KEY-platform-noarch && \
+    yum install -y yum-utils && \
+    yum-config-manager --add-repo http://${yum_repository_url}/platform-noarch.repo && \
+    yum install -y platform-tools-common-1.0.6 && \
+    yum clean all
 
 ENV LANG=C
 ENV TUXDIR=/opt/tuxedo/${tuxedo_version}
