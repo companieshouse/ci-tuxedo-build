@@ -44,7 +44,6 @@ RUN yum groupinstall -y 'Development Tools'
 RUN yum install -y \
     cyrus-sasl-devel.i686 \
     expat-devel.i686 \
-    expat-devel.x86_64 \
     glibc-devel.i686 \
     glibc-static.i686 \
     libcurl-devel.i686 \
