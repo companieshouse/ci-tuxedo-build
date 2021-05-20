@@ -4,6 +4,7 @@ ARG AWS_ACCESS_KEY_ID
 ARG AWS_SECRET_ACCESS_KEY
 
 ARG oracle_database_version
+ARG informix_sdk_version
 ARG resource_bucket_name
 ARG tuxedo_version
 
@@ -23,6 +24,11 @@ RUN mkdir -p /opt/oracle/${oracle_database_version} \
     && tar -xvzf oracle-database-${oracle_database_version}.tar.gz -C /opt/oracle/${oracle_database_version} \
     && chown -R root:root /opt/tuxedo/${tuxedo_version}
 
+RUN mkdir -p /opt/informix-client-sdk/${informix_sdk_version} \
+    && aws s3 cp s3://${resource_bucket_name}/packages/informix/informix-sdk-${informix_sdk_version}.tar.gz . \
+    && tar -xvzf informix-sdk-${informix_sdk_version}.tar.gz -C /opt/informix-client-sdk/${informix_sdk_version} \
+    && chown -R root:root /opt/informix-client-sdk/${informix_sdk_version}
+
 RUN aws s3 cp s3://${resource_bucket_name}/libraries/c/i686/libstdc++-libc6.2-2.so.3 /usr/lib \
     && chmod 755 /usr/lib/libstdc++-libc6.2-2.so.3
 
@@ -37,6 +43,7 @@ ARG yum_repository_url
 
 COPY --from=builder /opt/tuxedo /opt/tuxedo
 COPY --from=builder /opt/oracle /opt/oracle
+COPY --from=builder /opt/informix /opt/informix
 COPY --from=builder /usr/lib/libstdc++-libc6.2-2.so.3 /usr/lib/libstdc++-libc6.2-2.so.3
 
 RUN yum groupinstall -y 'Development Tools'
@@ -64,3 +71,4 @@ ENV TUXDIR=/opt/tuxedo/${tuxedo_version}
 ENV PATH=/opt/tuxedo/${tuxedo_version}/bin:${PATH}
 ENV LD_LIBRARY_PATH=/usr/lib/gcc/x86_64-redhat-linux/4.8.5/include:/opt/oracle/${oracle_database_version}/lib:/opt/tuxedo/${tuxedo_version}/lib
 ENV ORACLE_HOME=/opt/oracle/${oracle_database_version}
+ENV INFORMIXDIR=/opt/informix-client-sdk/${informix_sdk_version}
