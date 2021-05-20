@@ -43,7 +43,7 @@ ARG yum_repository_url
 
 COPY --from=builder /opt/tuxedo /opt/tuxedo
 COPY --from=builder /opt/oracle /opt/oracle
-COPY --from=builder /opt/informix /opt/informix
+COPY --from=builder /opt/informix-client-sdk /opt/informix-client-sdk
 COPY --from=builder /usr/lib/libstdc++-libc6.2-2.so.3 /usr/lib/libstdc++-libc6.2-2.so.3
 
 RUN yum groupinstall -y 'Development Tools'
