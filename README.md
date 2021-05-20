@@ -9,6 +9,7 @@ The following list details the build tools installed in the container image:
 * GNU Compiler Collection 4.8.5
 * Tuxedo (version configurable with build argument)
 * Oracle Database (version configurable with build argument)
+* IBM Informix Client SDK (version configurable with build argument) 
 
 ## Dependencies
 
