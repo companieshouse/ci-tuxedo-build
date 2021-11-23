@@ -5,6 +5,7 @@ ARG AWS_SECRET_ACCESS_KEY
 
 ARG informix_sdk_version
 ARG oracle_database_version
+ARG oracle_instant_client_version
 ARG resource_bucket_name
 ARG tuxedo_version
 
@@ -24,6 +25,14 @@ RUN mkdir -p /opt/oracle/${oracle_database_version} \
     && tar -xvzf oracle-database-${oracle_database_version}.tar.gz -C /opt/oracle/${oracle_database_version} \
     && chown -R root:root /opt/tuxedo/${tuxedo_version}
 
+RUN mkdir -p /opt/oracle-instant-client/${oracle_instant_client_version}; \
+    for package_name in basic precomp sdk; do \
+        aws s3 cp s3://${resource_bucket_name}/packages/oracle/instantclient-${package_name}-linux-${oracle_instant_client_version}.zip . ; \
+        unzip -d /opt/oracle-instant-client/${oracle_instant_client_version} instantclient-${package_name}-linux-${oracle_instant_client_version}.zip; \
+        rm -f instantclient-${package_name}-linux-${oracle_instant_client_version}.zip; \
+    done; \
+    chown -R root:root /opt/oracle-instant-client/${oracle_instant_client_version}
+
 RUN mkdir -p /opt/informix-client-sdk/${informix_sdk_version} \
     && aws s3 cp s3://${resource_bucket_name}/packages/informix/informix-sdk-${informix_sdk_version}.tar.gz . \
     && tar -xvzf informix-sdk-${informix_sdk_version}.tar.gz -C /opt/informix-client-sdk/${informix_sdk_version} \
@@ -39,12 +48,14 @@ FROM centos:centos7.9.2009
 
 ARG informix_sdk_version
 ARG oracle_database_version
+ARG oracle_instant_client_version
 ARG tuxedo_version
 ARG yum_repository_url
 
 COPY --from=builder /opt/tuxedo /opt/tuxedo
 COPY --from=builder /opt/oracle /opt/oracle
 COPY --from=builder /opt/informix-client-sdk /opt/informix-client-sdk
+COPY --from=builder /opt/oracle-instant-client /opt/oracle-instant-client
 COPY --from=builder /usr/lib/libstdc++-libc6.2-2.so.3 /usr/lib/libstdc++-libc6.2-2.so.3
 
 RUN yum groupinstall -y 'Development Tools'
@@ -59,6 +70,7 @@ RUN yum install -y \
     net-snmp-devel.i686 \
     openssl-devel.i686 \
     readline-devel.i686 \
+    libaio-devel.i686 \
     && yum clean all
 
 RUN rpm --import http://${yum_repository_url}/RPM-GPG-KEY-platform-noarch \
@@ -66,6 +78,12 @@ RUN rpm --import http://${yum_repository_url}/RPM-GPG-KEY-platform-noarch \
     && yum-config-manager --add-repo http://${yum_repository_url}/platform-noarch.repo \
     && yum install -y platform-tools-common-1.0.6 \
     && yum clean all
+
+COPY pcscfg.cfg /opt/oracle-instant-client/${oracle_instant_client_version}/precomp/admin/pcscfg.cfg
+
+RUN mkdir -p /opt/oracle-instant-client/${oracle_instant_client_version}/network/admin
+
+COPY tnsnames.ora /opt/oracle-instant-client/${oracle_instant_client_version}/network/admin/tnsnames.ora
 
 ENV LANG=C
 ENV TUXDIR=/opt/tuxedo/${tuxedo_version}
