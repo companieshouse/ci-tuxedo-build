@@ -25,13 +25,13 @@ RUN mkdir -p /opt/oracle/${oracle_database_version} \
     && tar -xvzf oracle-database-${oracle_database_version}.tar.gz -C /opt/oracle/${oracle_database_version} \
     && chown -R root:root /opt/tuxedo/${tuxedo_version}
 
-RUN mkdir -p /opt/oracle-instant-client/${oracle_instant_client_version}; \
-    for package_name in basic precomp sdk; do \
+RUN mkdir -p /opt/oracle-instant-client/${oracle_instant_client_version} \
+    && for package_name in basic precomp sdk; do \
         aws s3 cp s3://${resource_bucket_name}/packages/oracle/instantclient-${package_name}-linux-${oracle_instant_client_version}.zip . ; \
         unzip -d /opt/oracle-instant-client/${oracle_instant_client_version} instantclient-${package_name}-linux-${oracle_instant_client_version}.zip; \
         rm -f instantclient-${package_name}-linux-${oracle_instant_client_version}.zip; \
-    done; \
-    chown -R root:root /opt/oracle-instant-client/${oracle_instant_client_version}
+    done \
+    && chown -R root:root /opt/oracle-instant-client/${oracle_instant_client_version}
 
 RUN mkdir -p /opt/informix-client-sdk/${informix_sdk_version} \
     && aws s3 cp s3://${resource_bucket_name}/packages/informix/informix-sdk-${informix_sdk_version}.tar.gz . \
