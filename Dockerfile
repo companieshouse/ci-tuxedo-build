@@ -81,6 +81,8 @@ RUN rpm --import http://${yum_repository_url}/RPM-GPG-KEY-platform-noarch \
 
 COPY pcscfg.cfg /opt/oracle-instant-client/${oracle_instant_client_version}/precomp/admin/pcscfg.cfg
 
+RUN ln -s /opt/oracle-instant-client/${oracle_instant_client_version}/libclntsh.so.11.1 /opt/oracle-instant-client/${oracle_instant_client_version}/libclntsh.so
+
 RUN mkdir -p /opt/oracle-instant-client/${oracle_instant_client_version}/network/admin
 
 COPY tnsnames.ora /opt/oracle-instant-client/${oracle_instant_client_version}/network/admin/tnsnames.ora
