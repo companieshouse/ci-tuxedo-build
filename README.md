@@ -37,6 +37,6 @@ In addition to the distribution-managed packages detailed above, the following d
 |----------------------------|---------------------------------------------------------------------------------------------------------------|
 | `libstdc++-libc6.2-2.so.3` | Required build and runtime dependency for [chl-tuxedo](https://github.com/companieshouse/chl-tuxedo/) project |
 
-## SQL*Net Configuration
+## SQL*Net Configuration
 
 [fil-tuxedo](https://github.com/companieshouse/fil-tuxedo/) builds require a `tnsnames.ora` file with suitable Oracle database connection details. This file must be present in the build directory when building container images from this repository (i.e. it is required by a `COPY` instruction). However, the file is not committed to this public repository to avoid exposing connection details. The file is instead created in a separate task in the CI pipeline associated with this repository, before the image build is executed.
