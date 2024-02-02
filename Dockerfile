@@ -16,25 +16,25 @@ RUN curl https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip -o awscliv2.zi
     && ./aws/install
 
 RUN mkdir -p /opt/tuxedo/${tuxedo_version} \
-    && aws s3 cp s3://${resource_bucket_name}/packages/tuxedo/tuxedo-${tuxedo_version}.tar.gz . \
+    && aws s3 cp s3://${resource_bucket_name}/tuxedo/tuxedo-${tuxedo_version}.tar.gz . \
     && tar -xvzf tuxedo-${tuxedo_version}.tar.gz -C /opt/tuxedo/${tuxedo_version} \
     && chown -R root:root /opt/tuxedo/${tuxedo_version}
 
 RUN mkdir -p /opt/oracle/${oracle_database_version} \
-    && aws s3 cp s3://${resource_bucket_name}/packages/oracle/oracle-database-${oracle_database_version}.tar.gz . \
+    && aws s3 cp s3://${resource_bucket_name}/oracle/oracle-database-${oracle_database_version}.tar.gz . \
     && tar -xvzf oracle-database-${oracle_database_version}.tar.gz -C /opt/oracle/${oracle_database_version} \
     && chown -R root:root /opt/tuxedo/${tuxedo_version}
 
 RUN mkdir -p /opt/oracle-instant-client/${oracle_instant_client_version} \
     && for package_name in basic precomp sdk; do \
-        aws s3 cp s3://${resource_bucket_name}/packages/oracle/instantclient-${package_name}-linux-${oracle_instant_client_version}.zip . ; \
+        aws s3 cp s3://${resource_bucket_name}/oracle/instantclient-${package_name}-linux-${oracle_instant_client_version}.zip . ; \
         unzip -d /opt/oracle-instant-client/${oracle_instant_client_version} instantclient-${package_name}-linux-${oracle_instant_client_version}.zip; \
         rm -f instantclient-${package_name}-linux-${oracle_instant_client_version}.zip; \
     done \
     && chown -R root:root /opt/oracle-instant-client/${oracle_instant_client_version}
 
 RUN mkdir -p /opt/informix-client-sdk/${informix_sdk_version} \
-    && aws s3 cp s3://${resource_bucket_name}/packages/informix/informix-sdk-${informix_sdk_version}.tar.gz . \
+    && aws s3 cp s3://${resource_bucket_name}/informix/informix-sdk-${informix_sdk_version}.tar.gz . \
     && tar -xvzf informix-sdk-${informix_sdk_version}.tar.gz -C /opt/informix-client-sdk/${informix_sdk_version} \
     && chown -R root:root /opt/informix-client-sdk/${informix_sdk_version}
 
