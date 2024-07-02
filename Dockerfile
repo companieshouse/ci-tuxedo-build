@@ -61,6 +61,9 @@ COPY --from=builder /opt/informix-client-sdk /opt/informix-client-sdk
 COPY --from=builder /opt/oracle-instant-client /opt/oracle-instant-client
 COPY --from=builder /usr/lib/libstdc++-libc6.2-2.so.3 /usr/lib/libstdc++-libc6.2-2.so.3
 
+RUN sed -i -e "s|mirrorlist=|#mirrorlist=|g" /etc/yum.repos.d/CentOS-*
+RUN sed -i -e "s|#baseurl=http://mirror.centos.org|baseurl=http://vault.centos.org|g" /etc/yum.repos.d/CentOS-*
+
 RUN yum groupinstall -y 'Development Tools'
 
 RUN yum install -y \
