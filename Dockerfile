@@ -9,6 +9,9 @@ ARG oracle_instant_client_version
 ARG resource_bucket_name
 ARG tuxedo_version
 
+RUN sed -i -e "s|mirrorlist=|#mirrorlist=|g" /etc/yum.repos.d/CentOS-*
+RUN sed -i -e "s|#baseurl=http://mirror.centos.org|baseurl=http://vault.centos.org|g" /etc/yum.repos.d/CentOS-*
+
 RUN yum install -y unzip
 
 RUN curl https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip -o awscliv2.zip \
@@ -57,6 +60,9 @@ COPY --from=builder /opt/oracle /opt/oracle
 COPY --from=builder /opt/informix-client-sdk /opt/informix-client-sdk
 COPY --from=builder /opt/oracle-instant-client /opt/oracle-instant-client
 COPY --from=builder /usr/lib/libstdc++-libc6.2-2.so.3 /usr/lib/libstdc++-libc6.2-2.so.3
+
+RUN sed -i -e "s|mirrorlist=|#mirrorlist=|g" /etc/yum.repos.d/CentOS-*
+RUN sed -i -e "s|#baseurl=http://mirror.centos.org|baseurl=http://vault.centos.org|g" /etc/yum.repos.d/CentOS-*
 
 RUN yum groupinstall -y 'Development Tools'
 
