@@ -30,9 +30,9 @@ RUN mkdir -p /opt/oracle/${oracle_database_version} \
 
 RUN mkdir -p /opt/oracle-instant-client/${oracle_instant_client_version} \
     && for package_name in basic precomp sdk; do \
-        aws s3 cp s3://${resource_bucket_name}/oracle/instantclient-${package_name}-linux-${oracle_instant_client_version}.zip . ; \
-        unzip -d /opt/oracle-instant-client/${oracle_instant_client_version} instantclient-${package_name}-linux-${oracle_instant_client_version}.zip; \
-        rm -f instantclient-${package_name}-linux-${oracle_instant_client_version}.zip; \
+        aws s3 cp s3://${resource_bucket_name}/oracle/instant-client/instantclient-${package_name}-linux-${oracle_instant_client_version}.zip . \
+        && unzip -d /opt/oracle-instant-client/${oracle_instant_client_version} instantclient-${package_name}-linux-${oracle_instant_client_version}.zip \
+        && rm -f instantclient-${package_name}-linux-${oracle_instant_client_version}.zip; \
     done \
     && chown -R root:root /opt/oracle-instant-client/${oracle_instant_client_version}
 
